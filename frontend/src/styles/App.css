@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+}
+
+.App {
+  width: 800px;
+}
+
+.expandable {
+  display: flex;
+  padding: 8px;
+  border: 2px solid blue;
+  margin-top: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.answerInputContainer {
+  display: flex;
+  margin-top: 8px;
+}
+
+.answerInput {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.sectionHeader {
+  display: flex;
+  padding: 8px;
+  margin-top: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expandableContent {
+  display: flex;
+  cursor: pointer;
+}
+
+.smallIcon {
+  cursor: pointer;
+  margin-right: 2px;
+}
+
+.expandableHeader {
+  width: 100%;
+}

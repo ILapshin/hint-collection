@@ -1,0 +1,12 @@
+.confirmIcon {
+  position: absolute;
+  width: 100%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  margin-right: 2px;
+  color: gray;
+}
+
+.confirmIcon:hover {
+  color: green;
+}
