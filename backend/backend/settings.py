@@ -2,23 +2,17 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6fyl-yq-usil_noaky&l(+i_ru$^gupkdzc1(97__&*uyws2cz'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('DEBUG'))
 
 ALLOWED_HOSTS = []
 
-
-load_dotenv()
 
 DB_HOST=os.environ.get('DB_HOST')
 DB_PORT=os.environ.get('DB_PORT')
@@ -46,6 +40,11 @@ INSTALLED_APPS = [
     'djoser',
 
     'users',
+    'basemodel',
+    'topics',
+    'subtopics',
+    'questions',
+    'answers',
 ]
 
 REST_FRAMEWORK = {
@@ -88,7 +87,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
