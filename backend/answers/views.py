@@ -39,7 +39,17 @@ class AnswerDetail(APIView):
         return Response(AnswerSerializer(answer, context={'request': request}).data, status=status.HTTP_202_ACCEPTED)
     
     def delete(self, request, answer_id):
-        answer = get_object_or_404(Question, id=answer_id)
+        answer = get_object_or_404(Answer, id=answer_id)
         answer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
+
+class AnswerLike(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def patch(self, request, answer_id):
+        answer = get_object_or_404(Answer, id=answer_id)
+        answer.toggle_like(request)
+        return Response(AnswerSerializer(answer, context={'request': request}).data, status=status.HTTP_202_ACCEPTED)
+    

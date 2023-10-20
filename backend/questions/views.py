@@ -43,3 +43,13 @@ class QuestionDetail(APIView):
         question.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
+
+class QuestionMark(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def patch(self, request, question_id):
+        question = get_object_or_404(Question, id=question_id)
+        question.toggle_mark(request)
+        return Response(QuestionSerializer(question, context={'request': request}).data, status=status.HTTP_202_ACCEPTED)
+    

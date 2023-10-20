@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 
 from topics.models import Topic
 from subtopics.models import Subtopic
-from subtopics.serializers import SubtopicSerializer
+from subtopics.serializers import FullSubtopicSerializer
 
 
 class SubtopicList(APIView):
@@ -20,7 +20,7 @@ class SubtopicList(APIView):
         data = request.data
         data['topic'] = topic.id
         data['created_by'] = request.user.id
-        serializer = SubtopicSerializer(data=data, context={'request': request})
+        serializer = FullSubtopicSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -34,7 +34,7 @@ class SubtopicDetail(APIView):
         if not request.data.get('content'):            
             return Response(status=status.HTTP_400_BAD_REQUEST)
         subtopic.edit(request.data.get('content'))
-        return Response(SubtopicSerializer(subtopic, context={'request': request}).data, status=status.HTTP_202_ACCEPTED)
+        return Response(FullSubtopicSerializer(subtopic, context={'request': request}).data, status=status.HTTP_202_ACCEPTED)
     
     def delete(self, request, subtopic_id):
         subtopic = get_object_or_404(Subtopic, id=subtopic_id)
@@ -43,5 +43,5 @@ class SubtopicDetail(APIView):
     
     def get(self, request, subtopic_id):
         subtopic = get_object_or_404(Subtopic, id=subtopic_id)       
-        serializer = SubtopicSerializer(subtopic, context={'request': request})
+        serializer = FullSubtopicSerializer(subtopic, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
