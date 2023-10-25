@@ -100,7 +100,7 @@ const QuestionItem = ({ question, removeCallback }) => {
       </div>
       {expand ? (
         <>
-          {answers.map((answer) => (
+          {answers?.map((answer) => (
             <AnswerItem answer={answer} key={answer.id} />
           ))}
         </>
