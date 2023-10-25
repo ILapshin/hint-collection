@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
 
@@ -13,6 +14,7 @@ const QuestionItem = ({ question, removeCallback }) => {
   const [expand, setExpand] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isMarked, setIsMarked] = useState(question.is_marked);
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
   const questionInputRef = useRef();
 
@@ -28,10 +30,11 @@ const QuestionItem = ({ question, removeCallback }) => {
   };
 
   const updateQuestion = async () => {
-    const response = await fetch(`/v1/questions/${question.id}`, {
+    const response = await fetch(`/api/questions/${question.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
       body: JSON.stringify({ content: value }),
     });
@@ -39,19 +42,21 @@ const QuestionItem = ({ question, removeCallback }) => {
   };
 
   const markQuestion = async () => {
-    const response = await fetch(`/v1/questions/toggle-mark/${question.id}`, {
+    const response = await fetch(`/api/questions/toggle-mark/${question.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
     });
   };
 
   const deleteQuestion = async () => {
-    const response = await fetch(`/v1/questions/${question.id}`, {
+    const response = await fetch(`/api/questions/${question.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
     });
     removeCallback(question);

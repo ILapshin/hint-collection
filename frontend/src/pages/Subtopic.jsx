@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import QuestionItem from "../components/QuestionItem";
 import AddIcon from "../components/UI/icons/AddIcon";
@@ -11,13 +13,16 @@ const Subtopic = () => {
   const [questions, setQuestions] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
+  let { authTokens, logoutUser } = useContext(AuthContext);
+
+  const history = useNavigate();
 
   useEffect(() => {
     fetchSubtopic();
   }, []);
 
   const fetchSubtopic = async () => {
-    const response = await fetch(`/v1/subtopics/${subtopicId}`);
+    const response = await fetch(`/api/subtopics/${subtopicId}`);
     const data = await response.json();
     setQuestions(data.questions);
   };
@@ -28,22 +33,16 @@ const Subtopic = () => {
   };
 
   const addQuestion = async () => {
-    const response = await fetch(`/v1/questions/`, {
+    const response = await fetch(`/api/questions/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
-      body: JSON.stringify({ subtopic_id: subtopicId, ucontent: addText }),
+      body: JSON.stringify({ subtopic: subtopicId, content: addText }),
     });
     const question = await response.json();
-    const newQuestion = (
-      <QuestionItem
-        question={question}
-        removeCallback={removeQuestion}
-        key={question.id}
-      />
-    );
-    setQuestions(questions ? [...questions, newQuestion] : [newQuestion]);
+    setQuestions(questions ? [...questions, question] : [question]);
     setAddText("");
     setAdd(false);
   };
@@ -51,7 +50,7 @@ const Subtopic = () => {
   return (
     <div>
       <div className="sectionHeader">
-        <BackIcon />
+        <BackIcon callback={() => history("/")} />
         <AddIcon
           callback={() => {
             setAdd(true);

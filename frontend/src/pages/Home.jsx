@@ -1,6 +1,7 @@
 import "../styles/App.css";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 import TopicItem from "../components/TopicItem";
 import AddIcon from "../components/UI/icons/AddIcon";
@@ -10,13 +11,14 @@ const Home = () => {
   const [topics, setTopics] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
   useEffect(() => {
     fetchTopics();
   }, []);
 
   const fetchTopics = async () => {
-    const response = await fetch("/v1/topics/");
+    const response = await fetch("/api/topics/");
     const data = await response.json();
     setTopics(data);
   };
@@ -27,18 +29,17 @@ const Home = () => {
   };
 
   const addTopic = async () => {
-    const response = await fetch(`/v1/topics/`, {
+    const response = await fetch(`/api/topics/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
       body: JSON.stringify({ content: addText }),
     });
     const topic = await response.json();
-    const newTopic = (
-      <TopicItem topic={topic} removeCallback={removeTopic} key={topic.id} />
-    );
-    setTopics([...topics, newTopic]);
+
+    setTopics(topics ? [...topics, topic] : [topic]);
     setAddText("");
     setAdd(false);
   };

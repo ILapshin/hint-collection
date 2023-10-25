@@ -2,10 +2,14 @@ import React, { useState } from "react";
 
 import { IoReturnDownBackOutline } from "react-icons/io5";
 
-const BackIcon = () => {
+const BackIcon = ({ callback }) => {
   return (
     <div>
-      <IoReturnDownBackOutline size="2em" className="bigIcon" />
+      <IoReturnDownBackOutline
+        size="2em"
+        className="bigIcon"
+        onClick={callback}
+      />
     </div>
   );
 };

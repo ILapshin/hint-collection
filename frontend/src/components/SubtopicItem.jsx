@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 import { Link } from "react-router-dom";
 
@@ -9,6 +10,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
   const [text, setText] = useState(subtopic.content);
   const [value, setValue] = useState(subtopic.content);
   const [edit, setEdit] = useState(false);
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
   const sectionInputRef = useRef();
 
@@ -19,10 +21,11 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
   };
 
   const updateSubtopic = async () => {
-    const response = await fetch(`/v1/subtopics/${subtopic.id}`, {
+    const response = await fetch(`/api/subtopics/${subtopic.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
       body: JSON.stringify({ content: value }),
     });
@@ -30,10 +33,11 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
   };
 
   const deleteSubtopic = async () => {
-    const response = await fetch(`/v1/subtopics/${subtopic.id}`, {
+    const response = await fetch(`/api/subtopics/${subtopic.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
     });
     removeCallback(subtopic);
@@ -44,7 +48,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
     <div className="expandable">
       {!edit ? (
         <div>
-          <Link to={`/subtopic/${subtopic.id}`}>
+          <Link to={`/subtopics/${subtopic.id}`}>
             <div className="smallIcon">{text}</div>
           </Link>
           <div>

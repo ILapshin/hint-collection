@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly  
+from rest_framework.permissions import IsAuthenticated  
 
 from questions.models import Question
 from questions.serializers import QuestionSerializer
@@ -13,7 +13,7 @@ from subtopics.models import Subtopic
 
 class QuestionList(APIView):
 
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         subtopic = get_object_or_404(Subtopic, id=request.data.get('subtopic'))
@@ -29,7 +29,7 @@ class QuestionList(APIView):
 
 class QuestionDetail(APIView):
 
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, question_id):        
         question = get_object_or_404(Question, id=question_id)
@@ -46,7 +46,7 @@ class QuestionDetail(APIView):
 
 class QuestionMark(APIView):
 
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, question_id):
         question = get_object_or_404(Question, id=question_id)

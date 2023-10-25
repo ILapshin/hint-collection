@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 
 import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
+import AuthContext from "../context/AuthContext";
 
 import SubtopicItem from "./SubtopicItem";
 import AddIcon from "./UI/icons/AddIcon";
 import ConfirmIcon from "./UI/icons/ConfirmIcon";
-import EditForm from "./EditForm";
 
 const TopicItem = ({ topic, removeCallback }) => {
   const [expand, setExpand] = useState(false);
@@ -15,6 +15,7 @@ const TopicItem = ({ topic, removeCallback }) => {
   const [edit, setEdit] = useState(topic.edit);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
   const themeInputRef = useRef();
 
@@ -25,10 +26,11 @@ const TopicItem = ({ topic, removeCallback }) => {
   };
 
   const updateTopic = async () => {
-    const response = await fetch(`/v1/topics/${topic.id}`, {
+    const response = await fetch(`/api/topics/${topic.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
       body: JSON.stringify({ content: value }),
     });
@@ -36,10 +38,11 @@ const TopicItem = ({ topic, removeCallback }) => {
   };
 
   const deleteTopic = async () => {
-    const response = await fetch(`/v1/topics/${topic.id}`, {
+    const response = await fetch(`/api/topics/${topic.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
     });
     removeCallback(topic);
@@ -52,22 +55,16 @@ const TopicItem = ({ topic, removeCallback }) => {
   };
 
   const addSubtopic = async () => {
-    const response = await fetch(`/v1/subtopics/`, {
+    const response = await fetch(`/api/subtopics/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
-      body: JSON.stringify({ content: addText }),
+      body: JSON.stringify({ topic: topic.id, content: addText }),
     });
     const subtopic = await response.json();
-    const newSubtopic = (
-      <SubtopicItem
-        subtopic={subtopic}
-        removeCallback={removeSubtopic}
-        key={subtopic.id}
-      />
-    );
-    setSubtopics([...subtopics, newSubtopic]);
+    setSubtopics(subtopics ? [...subtopics, subtopic] : [subtopic]);
     setAddText("");
     setAdd(false);
   };
@@ -98,7 +95,12 @@ const TopicItem = ({ topic, removeCallback }) => {
                 />
                 <BiTrash className="smallIcon" onClick={deleteTopic} />
               </div>
-              <AddIcon callback={() => setAdd(true)} />
+              <AddIcon
+                callback={() => {
+                  setAdd(true);
+                  setExpand(true);
+                }}
+              />
             </div>
           </>
         ) : (

@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 import { BiPencil } from "react-icons/bi";
 import ConfirmIcon from "./UI/icons/ConfirmIcon";
@@ -7,6 +8,7 @@ const AnswerItem = ({ answer }) => {
   const [text, setText] = useState(answer.content);
   const [value, setValue] = useState(answer.content);
   const [edit, setEdit] = useState(false);
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
   const answerInputRef = useRef();
 
@@ -17,10 +19,11 @@ const AnswerItem = ({ answer }) => {
   };
 
   const updateAnswer = async () => {
-    const response = await fetch(`/v1/answers/${answer.id}`, {
+    const response = await fetch(`/api/answers/${answer.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
       },
       body: JSON.stringify({ content: value }),
     });
