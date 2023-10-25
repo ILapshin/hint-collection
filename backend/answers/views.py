@@ -29,7 +29,7 @@ class AnswerList(APIView):
 
 class AnswerDetail(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def patch(self, request, answer_id):        
         answer = get_object_or_404(Answer, id=answer_id)
@@ -46,7 +46,7 @@ class AnswerDetail(APIView):
 
 class AnswerLike(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def patch(self, request, answer_id):
         answer = get_object_or_404(Answer, id=answer_id)

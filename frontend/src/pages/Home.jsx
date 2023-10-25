@@ -1,51 +1,70 @@
 import "../styles/App.css";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import Topic from "../components/Topic";
+import TopicItem from "../components/TopicItem";
 import AddIcon from "../components/UI/icons/AddIcon";
-import SectionList from "../components/SectionList";
+import ConfirmIcon from "../components/UI/icons/ConfirmIcon";
 
-const TOPICS = [
-  {
-    id: 1,
-    title: "python",
-    sections: [
-      {
-        title: "База",
-        id: 1,
-      },
-      {
-        title: "База 2 ",
-        id: 2,
-      },
-      {
-        title: "База 3",
-        id: 3,
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "test",
-    sections: [],
-  },
-];
+const Home = () => {
+  const [topics, setTopics] = useState([]);
+  const [add, setAdd] = useState(false);
+  const [addText, setAddText] = useState("");
 
-const Home = ({ themes }) => {
+  useEffect(() => {
+    fetchTopics();
+  }, []);
+
+  const fetchTopics = async () => {
+    const response = await fetch("/v1/topics/");
+    const data = await response.json();
+    setTopics(data);
+  };
+
+  const removeTopic = (topic) => {
+    const newList = topics.filter((item) => item.id !== topic.id);
+    setTopics(newList);
+  };
+
+  const addTopic = async () => {
+    const response = await fetch(`/v1/topics/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: addText }),
+    });
+    const topic = await response.json();
+    const newTopic = (
+      <TopicItem topic={topic} removeCallback={removeTopic} key={topic.id} />
+    );
+    setTopics([...topics, newTopic]);
+    setAddText("");
+    setAdd(false);
+  };
+
   return (
-    <div>
-      <div className="sectionHeader">
-        <div></div>
-        <h1>Themes</h1>
-        <AddIcon />
+    <div className="container max-w-4xl">
+      <div className="">
+        <AddIcon callback={() => setAdd(true)} />
       </div>
-      {TOPICS.map((theme) => (
-        <Topic
-          header={theme.title}
-          content={<SectionList sections={theme.sections} />}
-          key={theme.id}
-        />
+      {add ? (
+        <form className="answerInputContainer">
+          <textarea
+            name="editForm"
+            className="answerInput"
+            cols={100}
+            rows={2}
+            value={addText}
+            onChange={(e) => {
+              setAddText(e.target.value);
+            }}
+          ></textarea>
+          <ConfirmIcon callback={addTopic} />
+        </form>
+      ) : null}
+      {topics?.map((topic) => (
+        <TopicItem topic={topic} removeCallback={removeTopic} key={topic.id} />
       ))}
     </div>
   );

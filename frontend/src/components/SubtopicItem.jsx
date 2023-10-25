@@ -1,25 +1,52 @@
 import React, { useState, useRef } from "react";
 
+import { Link } from "react-router-dom";
+
 import { BiPencil, BiTrash } from "react-icons/bi";
 import ConfirmIcon from "./UI/icons/ConfirmIcon";
 
-const Section = ({ content }) => {
-  const [text, setText] = useState(content);
-  const [value, setValue] = useState(content);
+const SubtopicItem = ({ subtopic, removeCallback }) => {
+  const [text, setText] = useState(subtopic.content);
+  const [value, setValue] = useState(subtopic.content);
   const [edit, setEdit] = useState(false);
 
   const sectionInputRef = useRef();
 
   const confirmChanges = (e) => {
+    updateSubtopic();
     setEdit(false);
     setText(sectionInputRef.current.value);
+  };
+
+  const updateSubtopic = async () => {
+    const response = await fetch(`/v1/subtopics/${subtopic.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: value }),
+    });
+    return response;
+  };
+
+  const deleteSubtopic = async () => {
+    const response = await fetch(`/v1/subtopics/${subtopic.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    removeCallback(subtopic);
+    return response;
   };
 
   return (
     <div className="expandable">
       {!edit ? (
         <div>
-          <div className="smallIcon">{text}</div>
+          <Link to={`/subtopic/${subtopic.id}`}>
+            <div className="smallIcon">{text}</div>
+          </Link>
           <div>
             <BiPencil
               className="smallIcon"
@@ -27,7 +54,7 @@ const Section = ({ content }) => {
                 setEdit(true);
               }}
             />
-            <BiTrash className="smallIcon" />
+            <BiTrash className="smallIcon" onClick={deleteSubtopic} />
           </div>
         </div>
       ) : (
@@ -48,4 +75,4 @@ const Section = ({ content }) => {
   );
 };
 
-export default Section;
+export default SubtopicItem;

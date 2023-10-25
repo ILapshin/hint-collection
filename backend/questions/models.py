@@ -7,7 +7,7 @@ from subtopics.models import Subtopic
 
 class Question(BaseModel):
     subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE, related_name='questions')    
-    marks = models.ManyToManyField(CustomUser, related_name='marks')
+    marks = models.ManyToManyField(CustomUser, blank=True, related_name='marks')
 
     def toggle_mark(self, request):
         user: CustomUser = request.user

@@ -13,7 +13,7 @@ from subtopics.models import Subtopic
 
 class QuestionList(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, request):
         subtopic = get_object_or_404(Subtopic, id=request.data.get('subtopic'))
@@ -29,7 +29,7 @@ class QuestionList(APIView):
 
 class QuestionDetail(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def patch(self, request, question_id):        
         question = get_object_or_404(Question, id=question_id)
@@ -46,7 +46,7 @@ class QuestionDetail(APIView):
 
 class QuestionMark(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def patch(self, request, question_id):
         question = get_object_or_404(Question, id=question_id)

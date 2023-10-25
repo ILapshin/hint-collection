@@ -12,7 +12,7 @@ from topics.serializers import TopicSerializer
 
 class TopicList(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, request):        
         data = request.data
@@ -33,7 +33,7 @@ class TopicList(APIView):
 
 class TopicChange(APIView):
 
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def patch(self, request, topic_id):
         topic = get_object_or_404(Topic, id=topic_id)

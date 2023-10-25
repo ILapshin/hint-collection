@@ -13,7 +13,7 @@ from subtopics.serializers import FullSubtopicSerializer
 
 class SubtopicList(APIView):
 
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     def post(self, request):        
         topic = get_object_or_404(Topic, id=request.data.get('topic'))

@@ -4,10 +4,15 @@ import { CgAdd } from "react-icons/cg";
 
 import classes from "./AddIcon.module.css";
 
-const AddIcon = () => {
+const AddIcon = ({ callback }) => {
   return (
     <div>
-      <CgAdd size="3em" color="green" className={classes.addIcon} />
+      <CgAdd
+        size="3em"
+        color="green"
+        className={classes.addIcon}
+        onClick={callback}
+      />
     </div>
   );
 };

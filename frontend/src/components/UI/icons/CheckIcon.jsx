@@ -4,10 +4,11 @@ import { BiCheckCircle } from "react-icons/bi";
 
 import classes from "./AddIcon.module.css";
 
-const CheckIcon = ({ check }) => {
-  const [curCheck, setCurCheck] = useState(check);
+const CheckIcon = ({ callback, isMarked }) => {
+  const [curCheck, setCurCheck] = useState(isMarked);
 
   const toggle = (e) => {
+    callback();
     curCheck ? setCurCheck(false) : setCurCheck(true);
   };
 
