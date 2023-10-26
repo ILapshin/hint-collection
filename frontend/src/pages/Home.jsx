@@ -61,24 +61,30 @@ const Home = () => {
           }}
         />
       </div>
-      {add ? (
-        <form className="answerInputContainer">
-          <textarea
-            name="editForm"
-            className="answerInput"
-            cols={100}
-            rows={2}
-            value={addText}
-            onChange={(e) => {
-              setAddText(e.target.value);
-            }}
-          ></textarea>
-          <ConfirmIcon callback={addTopic} />
-        </form>
-      ) : null}
-      {topics?.map((topic) => (
-        <TopicItem topic={topic} removeCallback={removeTopic} key={topic.id} />
-      ))}
+      <div className="mt-4">
+        {add ? (
+          <form className="border border-blue-300 rounded-md">
+            <textarea
+              name="editForm"
+              className=""
+              cols={100}
+              rows={2}
+              value={addText}
+              onChange={(e) => {
+                setAddText(e.target.value);
+              }}
+            ></textarea>
+            <ConfirmIcon callback={addTopic} />
+          </form>
+        ) : null}
+        {topics?.map((topic) => (
+          <TopicItem
+            topic={topic}
+            removeCallback={removeTopic}
+            key={topic.id}
+          />
+        ))}
+      </div>
     </div>
   );
 };

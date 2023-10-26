@@ -16,7 +16,7 @@ const CheckIcon = ({ callback, isMarked }) => {
     <div>
       <BiCheckCircle
         size="3em"
-        className={classes.addIcon}
+        className=""
         color={curCheck ? "green" : "gray"}
         onClick={toggle}
       />

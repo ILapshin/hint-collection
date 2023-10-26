@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 
 import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
+import { CgAdd } from "react-icons/cg";
 import AuthContext from "../context/AuthContext";
 
 import SubtopicItem from "./SubtopicItem";
@@ -74,50 +75,56 @@ const TopicItem = ({ topic, removeCallback }) => {
   };
 
   return (
-    <div className="container ">
-      <div>
+    <div className="">
+      <div className="border-2 border-cyan-500 rounded-xl py-2 px-4 w-full inline-block border-l-4">
         {!edit ? (
-          <>
+          <div className="">
             <div
-              className="expandableContent"
+              className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
               onClick={() => {
                 expand ? setExpand(false) : setExpand(true);
               }}
             >
-              <div className="smallIcon">
+              <div className="text-xl w-6 h-8 text-center float-left">
                 {expand ? <BiCaretDown /> : <BiCaretRight />}
               </div>
-              <div>{text}</div>
+              <h1 className="text-xl float-right ">{text}</h1>
             </div>
-            <div className="expandableContent">
+            <div className="inline-block float-right">
               {user && user.user_id === topic.created_by ? (
-                <div>
+                <div className="text-lg my-1 text-gray-500 float-left">
                   <BiPencil
-                    className="smallIcon"
+                    className="m-1  cursor-pointer"
                     onClick={() => {
                       setEdit(true);
                     }}
                   />
-                  <BiTrash className="smallIcon" onClick={deleteTopic} />
+                  <BiTrash
+                    className="m-1  cursor-pointer"
+                    onClick={deleteTopic}
+                  />
                 </div>
               ) : null}
-              <AddIcon
-                callback={() => {
-                  if (!user) {
-                    alert("Login to add subtopics!");
-                    return;
-                  }
-                  setAdd(true);
-                  setExpand(true);
-                }}
-              />
+              <div className="text-lg text-cyan-500 float-right  cursor-pointer">
+                <CgAdd
+                  size="3em"
+                  onClick={() => {
+                    if (!user) {
+                      alert("Login to add subtopics!");
+                      return;
+                    }
+                    setAdd(true);
+                    setExpand(true);
+                  }}
+                />
+              </div>
             </div>
-          </>
+          </div>
         ) : (
-          <form className="answerInputContainer">
+          <form className="">
             <textarea
               name="answerInput"
-              className="answerInput"
+              className=""
               cols={100}
               rows={2}
               value={value}
@@ -129,10 +136,10 @@ const TopicItem = ({ topic, removeCallback }) => {
         )}
       </div>
       {add ? (
-        <form className="answerInputContainer">
+        <form className="">
           <textarea
             name="editForm"
-            className="answerInput"
+            className=""
             cols={100}
             rows={2}
             value={addText}
@@ -145,7 +152,7 @@ const TopicItem = ({ topic, removeCallback }) => {
       ) : null}
 
       {expand ? (
-        <div>
+        <div className="">
           {subtopics?.map((subtopic) => (
             <SubtopicItem
               subtopic={subtopic}

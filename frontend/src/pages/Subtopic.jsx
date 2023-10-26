@@ -60,7 +60,7 @@ const Subtopic = () => {
 
   return (
     <div>
-      <div className="sectionHeader">
+      <div className="">
         <BackIcon callback={() => history("/")} />
         <AddIcon
           callback={() => {
@@ -73,10 +73,10 @@ const Subtopic = () => {
         />
       </div>
       {add ? (
-        <form className="answerInputContainer">
+        <form className="">
           <textarea
             name="editForm"
-            className="answerInput"
+            className=""
             cols={100}
             rows={2}
             value={addText}

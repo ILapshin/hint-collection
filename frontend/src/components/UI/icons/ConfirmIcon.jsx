@@ -6,7 +6,7 @@ import classes from "./ConfirmIcon.module.css";
 const ConfirmIcon = ({ callback }) => {
   return (
     <div>
-      <HiCheck size="3em" className={classes.ConfirmIcon} onClick={callback} />
+      <HiCheck size="3em" className="" onClick={callback} />
     </div>
   );
 };

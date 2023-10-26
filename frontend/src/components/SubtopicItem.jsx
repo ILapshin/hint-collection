@@ -45,29 +45,33 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
   };
 
   return (
-    <div className="expandable">
+    <div className="border-2 border-cyan-300 border-l-4 rounded-lg m-2 py-2 px-4 ">
       {!edit ? (
-        <div>
-          <Link to={`/subtopics/${subtopic.id}`}>
-            <div className="smallIcon">{text}</div>
-          </Link>
-          {user && user.user_id === subtopic.created_by ? (
-            <div>
-              <BiPencil
-                className="smallIcon"
-                onClick={() => {
-                  setEdit(true);
-                }}
-              />
-              <BiTrash className="smallIcon" onClick={deleteSubtopic} />
-            </div>
-          ) : null}
+        <div className="w-full inline-block ">
+          <div className="float-left">
+            <Link to={`/subtopics/${subtopic.id}`}>
+              <h2 className="">{text}</h2>
+            </Link>
+          </div>
+          <div className="float-right text-gray-500">
+            {user && user.user_id === subtopic.created_by ? (
+              <div className="">
+                <BiPencil
+                  className="m-1"
+                  onClick={() => {
+                    setEdit(true);
+                  }}
+                />
+                <BiTrash className="m-1" onClick={deleteSubtopic} />
+              </div>
+            ) : null}
+          </div>
         </div>
       ) : (
-        <form className="answerInputContainer">
+        <form className="">
           <textarea
             name="answerInput"
-            className="answerInput"
+            className=""
             cols={100}
             rows={2}
             value={value}
