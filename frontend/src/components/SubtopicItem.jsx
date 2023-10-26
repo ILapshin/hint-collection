@@ -4,17 +4,20 @@ import AuthContext from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 import { BiPencil, BiTrash } from "react-icons/bi";
-import ConfirmIcon from "./UI/icons/ConfirmIcon";
+import { HiCheck, HiX } from "react-icons/hi";
+import countTextareaHeight from "../utils/TextareaHeight";
 
 const SubtopicItem = ({ subtopic, removeCallback }) => {
   const [text, setText] = useState(subtopic.content);
   const [value, setValue] = useState(subtopic.content);
   const [edit, setEdit] = useState(false);
+  const [editHeight, setEditHeight] = useState(2);
   let { user, authTokens } = useContext(AuthContext);
 
   const sectionInputRef = useRef();
 
   const confirmChanges = (e) => {
+    e.preventDefault();
     updateSubtopic();
     setEdit(false);
     setText(sectionInputRef.current.value);
@@ -50,7 +53,9 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
         <div className="w-full inline-block ">
           <div className="float-left">
             <Link to={`/subtopics/${subtopic.id}`}>
-              <h2 className="text-lg">{text}</h2>
+              <h2 className="max-w-prose text-lg float-right break-words whitespace-break-spaces">
+                {text}
+              </h2>
             </Link>
           </div>
           <div className="float-right text-gray-300">
@@ -60,6 +65,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
                   className="m-1 hover:text-gray-600  cursor-pointer"
                   onClick={() => {
                     setEdit(true);
+                    setEditHeight(countTextareaHeight(value));
                   }}
                 />
                 <BiTrash
@@ -71,17 +77,39 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
           </div>
         </div>
       ) : (
-        <form className="">
+        <form
+          className="w-full h-full relative"
+          onSubmit={confirmChanges}
+          onAbort={(e) => {
+            e.preventDefault();
+            setValue("");
+            setEdit(false);
+          }}
+        >
           <textarea
-            name="answerInput"
-            className=""
+            name="content"
+            className=" w-full h-full resize-none outline-none text-lg"
             cols={100}
-            rows={2}
+            rows={editHeight}
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              setValue(e.target.value);
+              setEditHeight(countTextareaHeight(value));
+            }}
             ref={sectionInputRef}
           ></textarea>
-          <ConfirmIcon callback={confirmChanges} />
+          <button
+            type="abort"
+            className="absolute bottom-2 right-14 text-rose-200  cursor-pointer hover:text-rose-500"
+          >
+            <HiX size="3em" />
+          </button>
+          <button
+            type="submit"
+            className="absolute bottom-2 right-2 text-emerald-200  cursor-pointer hover:text-emerald-500"
+          >
+            <HiCheck size="3em" />
+          </button>
         </form>
       )}
     </div>

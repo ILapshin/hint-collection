@@ -8,6 +8,8 @@ import AuthContext from "../context/AuthContext";
 import SubtopicItem from "./SubtopicItem";
 import ConfirmIcon from "./UI/icons/ConfirmIcon";
 
+import countTextareaHeight from "../utils/TextareaHeight";
+
 const TopicItem = ({ topic, removeCallback }) => {
   const [expand, setExpand] = useState(false);
   const [text, setText] = useState(topic.content);
@@ -20,18 +22,6 @@ const TopicItem = ({ topic, removeCallback }) => {
   let { user, authTokens } = useContext(AuthContext);
 
   const themeInputRef = useRef();
-
-  const countTextareaHeight = (v) => {
-    let lines = v.split("\n");
-    let rows = lines.length + 1;
-    for (let i in lines) {
-      if (lines[i] === "") {
-        continue;
-      }
-      rows += Math.floor(lines[i].length / 100);
-    }
-    return rows;
-  };
 
   const confirmChanges = (e) => {
     e.preventDefault();

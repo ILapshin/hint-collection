@@ -5,12 +5,14 @@ import AuthContext from "../context/AuthContext";
 import { CgAdd } from "react-icons/cg";
 
 import TopicItem from "../components/TopicItem";
-import ConfirmIcon from "../components/UI/icons/ConfirmIcon";
+import { HiCheck, HiX } from "react-icons/hi";
+import countTextareaHeight from "../utils/TextareaHeight";
 
 const Home = () => {
   const [topics, setTopics] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
+  const [addHeight, setAddHeight] = useState(2);
   let { user, authTokens } = useContext(AuthContext);
 
   useEffect(() => {
@@ -28,7 +30,8 @@ const Home = () => {
     setTopics(newList);
   };
 
-  const addTopic = async () => {
+  const addTopic = async (e) => {
+    e.preventDefault();
     if (addText === "") {
       setAdd(false);
       return;
@@ -60,32 +63,57 @@ const Home = () => {
                 return;
               }
               setAdd(true);
+              setAddHeight(countTextareaHeight(addText));
             }}
           />
         </div>
-        <div className="mt-2">
+        <div className="m-2">
           {add ? (
-            <form className="border border-blue-300 rounded-md">
-              <textarea
-                name="editForm"
-                className=""
-                cols={100}
-                rows={2}
-                value={addText}
-                onChange={(e) => {
-                  setAddText(e.target.value);
+            <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
+              <form
+                className="w-full h-full relative"
+                onSubmit={addTopic}
+                onAbort={(e) => {
+                  e.preventDefault();
+                  setAddText("");
+                  setAdd(false);
                 }}
-              ></textarea>
-              <ConfirmIcon callback={addTopic} />
-            </form>
+              >
+                <textarea
+                  name="addForm"
+                  className=" w-full h-full resize-none outline-none text-xl"
+                  cols={100}
+                  rows={addHeight}
+                  value={addText}
+                  onChange={(e) => {
+                    setAddText(e.target.value);
+                    setAddHeight(countTextareaHeight(addText));
+                  }}
+                ></textarea>
+                <button
+                  type="abort"
+                  className="absolute bottom-2 right-14 text-rose-200  cursor-pointer hover:text-rose-500"
+                >
+                  <HiX size="3em" />
+                </button>
+                <button
+                  type="submit"
+                  className="absolute bottom-2 right-2 text-emerald-200  cursor-pointer hover:text-emerald-500"
+                >
+                  <HiCheck size="3em" />
+                </button>
+              </form>
+            </div>
           ) : null}
-          {topics?.map((topic) => (
-            <TopicItem
-              topic={topic}
-              removeCallback={removeTopic}
-              key={topic.id}
-            />
-          ))}
+          <div className="mt-2">
+            {topics?.map((topic) => (
+              <TopicItem
+                topic={topic}
+                removeCallback={removeTopic}
+                key={topic.id}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
