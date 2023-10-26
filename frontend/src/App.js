@@ -10,17 +10,19 @@ import Login from "./pages/Login";
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Header />
-        <Routes>
-          <Route path="/" exact element={<Home />} />
-          <Route path="/subtopics/:subtopicId" element={<Subtopic />} />
-          <Route path="/signup/" element={<Signup />} />
-          <Route path="/login/" element={<Login />} />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <div className=" w-full">
+      <Router>
+        <AuthProvider>
+          <Header />
+          <Routes>
+            <Route path="/" exact element={<Home />} />
+            <Route path="/subtopics/:subtopicId" element={<Subtopic />} />
+            <Route path="/signup/" element={<Signup />} />
+            <Route path="/login/" element={<Login />} />
+          </Routes>
+        </AuthProvider>
+      </Router>
+    </div>
   );
 }
 

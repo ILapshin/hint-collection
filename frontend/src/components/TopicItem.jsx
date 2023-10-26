@@ -2,10 +2,10 @@ import React, { useState, useRef, useContext } from "react";
 
 import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
+import { HiCheck, HiX } from "react-icons/hi";
 import AuthContext from "../context/AuthContext";
 
 import SubtopicItem from "./SubtopicItem";
-import AddIcon from "./UI/icons/AddIcon";
 import ConfirmIcon from "./UI/icons/ConfirmIcon";
 
 const TopicItem = ({ topic, removeCallback }) => {
@@ -16,11 +16,25 @@ const TopicItem = ({ topic, removeCallback }) => {
   const [edit, setEdit] = useState(topic.edit);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
+  const [editHeight, setEditHeight] = useState(2);
   let { user, authTokens } = useContext(AuthContext);
 
   const themeInputRef = useRef();
 
+  const countTextareaHeight = (v) => {
+    let lines = v.split("\n");
+    let rows = lines.length + 1;
+    for (let i in lines) {
+      if (lines[i] === "") {
+        continue;
+      }
+      rows += Math.floor(lines[i].length / 100);
+    }
+    return rows;
+  };
+
   const confirmChanges = (e) => {
+    e.preventDefault();
     updateTopic();
     setEdit(false);
     setText(themeInputRef.current.value);
@@ -76,36 +90,43 @@ const TopicItem = ({ topic, removeCallback }) => {
 
   return (
     <div className="">
-      <div className="border-2 border-cyan-500 rounded-xl py-2 px-4 w-full inline-block border-l-4">
+      <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
         {!edit ? (
           <div className="">
             <div
               className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
               onClick={() => {
+                if (expand && add) {
+                  setAddText("");
+                  setAdd(false);
+                }
                 expand ? setExpand(false) : setExpand(true);
               }}
             >
-              <div className="text-xl w-6 h-8 text-center float-left">
+              <div className="text-xl text-center float-left my-1">
                 {expand ? <BiCaretDown /> : <BiCaretRight />}
               </div>
-              <h1 className="text-xl float-right ">{text}</h1>
+              <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
+                {text}
+              </h1>
             </div>
             <div className="inline-block float-right">
               {user && user.user_id === topic.created_by ? (
-                <div className="text-lg my-1 text-gray-500 float-left">
+                <div className="text-lg my-1 text-gray-300 float-left">
                   <BiPencil
-                    className="m-1  cursor-pointer"
+                    className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={() => {
                       setEdit(true);
+                      setEditHeight(countTextareaHeight(value));
                     }}
                   />
                   <BiTrash
-                    className="m-1  cursor-pointer"
+                    className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={deleteTopic}
                   />
                 </div>
               ) : null}
-              <div className="text-lg text-cyan-500 float-right  cursor-pointer">
+              <div className="text-lg text-cyan-200 float-right  cursor-pointer hover:text-cyan-500">
                 <CgAdd
                   size="3em"
                   onClick={() => {
@@ -121,17 +142,39 @@ const TopicItem = ({ topic, removeCallback }) => {
             </div>
           </div>
         ) : (
-          <form className="">
+          <form
+            className="w-full h-full relative"
+            onSubmit={confirmChanges}
+            onAbort={(e) => {
+              e.preventDefault();
+              setValue("");
+              setEdit(false);
+            }}
+          >
             <textarea
-              name="answerInput"
-              className=""
+              name="content"
+              className=" w-full h-full resize-none outline-none text-xl"
               cols={100}
-              rows={2}
+              rows={editHeight}
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={(e) => {
+                setValue(e.target.value);
+                setEditHeight(countTextareaHeight(value));
+              }}
               ref={themeInputRef}
             ></textarea>
-            <ConfirmIcon callback={confirmChanges} />
+            <button
+              type="abort"
+              className="absolute bottom-2 right-14 text-rose-200  cursor-pointer hover:text-rose-500"
+            >
+              <HiX size="3em" />
+            </button>
+            <button
+              type="submit"
+              className="absolute bottom-2 right-2 text-emerald-200  cursor-pointer hover:text-emerald-500"
+            >
+              <HiCheck size="3em" />
+            </button>
           </form>
         )}
       </div>

@@ -45,24 +45,27 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
   };
 
   return (
-    <div className="border-2 border-cyan-300 border-l-4 rounded-lg m-2 py-2 px-4 ">
+    <div className="border-2 border-cyan-400 border-l-4 rounded-lg m-2 py-2 px-4 bg-white">
       {!edit ? (
         <div className="w-full inline-block ">
           <div className="float-left">
             <Link to={`/subtopics/${subtopic.id}`}>
-              <h2 className="">{text}</h2>
+              <h2 className="text-lg">{text}</h2>
             </Link>
           </div>
-          <div className="float-right text-gray-500">
+          <div className="float-right text-gray-300">
             {user && user.user_id === subtopic.created_by ? (
               <div className="">
                 <BiPencil
-                  className="m-1"
+                  className="m-1 hover:text-gray-600  cursor-pointer"
                   onClick={() => {
                     setEdit(true);
                   }}
                 />
-                <BiTrash className="m-1" onClick={deleteSubtopic} />
+                <BiTrash
+                  className="m-1 hover:text-gray-600  cursor-pointer"
+                  onClick={deleteSubtopic}
+                />
               </div>
             ) : null}
           </div>
