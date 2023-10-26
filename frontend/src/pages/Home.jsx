@@ -11,7 +11,7 @@ const Home = () => {
   const [topics, setTopics] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);
 
   useEffect(() => {
     fetchTopics();
@@ -29,6 +29,10 @@ const Home = () => {
   };
 
   const addTopic = async () => {
+    if (addText === "") {
+      setAdd(false);
+      return;
+    }
     const response = await fetch(`/api/topics/`, {
       method: "POST",
       headers: {
@@ -47,7 +51,15 @@ const Home = () => {
   return (
     <div className="container max-w-4xl">
       <div className="">
-        <AddIcon callback={() => setAdd(true)} />
+        <AddIcon
+          callback={() => {
+            if (!user) {
+              alert("Login to add topics!");
+              return;
+            }
+            setAdd(true);
+          }}
+        />
       </div>
       {add ? (
         <form className="answerInputContainer">

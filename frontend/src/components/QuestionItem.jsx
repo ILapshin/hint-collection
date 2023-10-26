@@ -14,7 +14,7 @@ const QuestionItem = ({ question, removeCallback }) => {
   const [expand, setExpand] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isMarked, setIsMarked] = useState(question.is_marked);
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);
 
   const questionInputRef = useRef();
 
@@ -25,6 +25,10 @@ const QuestionItem = ({ question, removeCallback }) => {
   };
 
   const toggleMark = (e) => {
+    if (!user) {
+      alert("Login for marking questions!");
+      return;
+    }
     markQuestion();
     setIsMarked(isMarked ? false : true);
   };
@@ -76,15 +80,17 @@ const QuestionItem = ({ question, removeCallback }) => {
               <div>{text}</div>
             </div>
             <div>
-              <div>
-                <BiPencil
-                  className="smallIcon"
-                  onClick={() => {
-                    expand ? setEdit(false) : setEdit(true);
-                  }}
-                />
-                <BiTrash className="smallIcon" onClick={deleteQuestion} />
-              </div>
+              {user && user.user_id === question.created_by ? (
+                <div>
+                  <BiPencil
+                    className="smallIcon"
+                    onClick={() => {
+                      expand ? setEdit(false) : setEdit(true);
+                    }}
+                  />
+                  <BiTrash className="smallIcon" onClick={deleteQuestion} />
+                </div>
+              ) : null}
               <CheckIcon callback={toggleMark} isMarked={isMarked} />
             </div>
           </>
@@ -98,7 +104,7 @@ const QuestionItem = ({ question, removeCallback }) => {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               ref={questionInputRef}
-            ></textarea>
+            />
             <ConfirmIcon callback={confirmChanges} />
           </form>
         )}

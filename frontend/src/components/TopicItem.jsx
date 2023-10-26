@@ -15,7 +15,7 @@ const TopicItem = ({ topic, removeCallback }) => {
   const [edit, setEdit] = useState(topic.edit);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);
 
   const themeInputRef = useRef();
 
@@ -55,6 +55,10 @@ const TopicItem = ({ topic, removeCallback }) => {
   };
 
   const addSubtopic = async () => {
+    if (addText === "") {
+      setAdd(false);
+      return;
+    }
     const response = await fetch(`/api/subtopics/`, {
       method: "POST",
       headers: {
@@ -86,17 +90,23 @@ const TopicItem = ({ topic, removeCallback }) => {
               <div>{text}</div>
             </div>
             <div className="expandableContent">
-              <div>
-                <BiPencil
-                  className="smallIcon"
-                  onClick={() => {
-                    setEdit(true);
-                  }}
-                />
-                <BiTrash className="smallIcon" onClick={deleteTopic} />
-              </div>
+              {user && user.user_id === topic.created_by ? (
+                <div>
+                  <BiPencil
+                    className="smallIcon"
+                    onClick={() => {
+                      setEdit(true);
+                    }}
+                  />
+                  <BiTrash className="smallIcon" onClick={deleteTopic} />
+                </div>
+              ) : null}
               <AddIcon
                 callback={() => {
+                  if (!user) {
+                    alert("Login to add subtopics!");
+                    return;
+                  }
                   setAdd(true);
                   setExpand(true);
                 }}

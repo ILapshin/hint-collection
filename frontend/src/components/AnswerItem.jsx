@@ -8,7 +8,7 @@ const AnswerItem = ({ answer }) => {
   const [text, setText] = useState(answer.content);
   const [value, setValue] = useState(answer.content);
   const [edit, setEdit] = useState(false);
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);
 
   const answerInputRef = useRef();
 
@@ -35,12 +35,14 @@ const AnswerItem = ({ answer }) => {
       {!edit ? (
         <>
           <div>{text}</div>
-          <BiPencil
-            size="2em"
-            onClick={() => {
-              setEdit(true);
-            }}
-          />
+          {user && user.user_id === answer.created_by ? (
+            <BiPencil
+              size="2em"
+              onClick={() => {
+                setEdit(true);
+              }}
+            />
+          ) : null}
         </>
       ) : (
         <form className="answerInputContainer">

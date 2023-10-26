@@ -13,7 +13,7 @@ const Subtopic = () => {
   const [questions, setQuestions] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);
 
   const history = useNavigate();
 
@@ -22,7 +22,14 @@ const Subtopic = () => {
   }, []);
 
   const fetchSubtopic = async () => {
-    const response = await fetch(`/api/subtopics/${subtopicId}`);
+    const response = await fetch(`/api/subtopics/${subtopicId}`, {
+      headers: authTokens
+        ? {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + String(authTokens.access),
+          }
+        : { "Content-Type": "application/json" },
+    });
     const data = await response.json();
     setQuestions(data.questions);
   };
@@ -33,6 +40,10 @@ const Subtopic = () => {
   };
 
   const addQuestion = async () => {
+    if (addText === "") {
+      setAdd(false);
+      return;
+    }
     const response = await fetch(`/api/questions/`, {
       method: "POST",
       headers: {
@@ -53,6 +64,10 @@ const Subtopic = () => {
         <BackIcon callback={() => history("/")} />
         <AddIcon
           callback={() => {
+            if (!user) {
+              alert("Login to add questions!");
+              return;
+            }
             setAdd(true);
           }}
         />

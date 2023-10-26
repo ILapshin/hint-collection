@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   let loginUser = async (e) => {
     e.preventDefault();
-    let response = await fetch("http://127.0.0.1:8000/api/auth/jwt/create/", {
+    let response = await fetch("/api/auth/jwt/create/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("authTokens", JSON.stringify(data));
       history("/");
     } else {
-      alert("Something went wrong!");
+      alert(data.detail);
     }
   };
 
@@ -51,11 +51,10 @@ export const AuthProvider = ({ children }) => {
     setAuthTokens(null);
     setUser(null);
     localStorage.removeItem("authTokens");
-    // history("/");
   };
 
   let updateToken = async () => {
-    let response = await fetch("http://127.0.0.1:8000/api/auth/jwt/refresh/", {
+    let response = await fetch("/api/auth/jwt/refresh/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

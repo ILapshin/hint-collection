@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from questions.models import Question
 from questions.serializers import QuestionSerializer
 from subtopics.models import Subtopic
+from answers.models import Answer
 
 
 class QuestionList(APIView):
@@ -23,6 +24,11 @@ class QuestionList(APIView):
         serializer = QuestionSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
+            empty_answer = Answer.objects.create(
+                question=serializer.instance,
+                created_by=request.user,
+                content='Не забудь добавить ответ!'
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

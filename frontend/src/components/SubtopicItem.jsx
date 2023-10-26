@@ -10,7 +10,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
   const [text, setText] = useState(subtopic.content);
   const [value, setValue] = useState(subtopic.content);
   const [edit, setEdit] = useState(false);
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);
 
   const sectionInputRef = useRef();
 
@@ -51,15 +51,17 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
           <Link to={`/subtopics/${subtopic.id}`}>
             <div className="smallIcon">{text}</div>
           </Link>
-          <div>
-            <BiPencil
-              className="smallIcon"
-              onClick={() => {
-                setEdit(true);
-              }}
-            />
-            <BiTrash className="smallIcon" onClick={deleteSubtopic} />
-          </div>
+          {user && user.user_id === subtopic.created_by ? (
+            <div>
+              <BiPencil
+                className="smallIcon"
+                onClick={() => {
+                  setEdit(true);
+                }}
+              />
+              <BiTrash className="smallIcon" onClick={deleteSubtopic} />
+            </div>
+          ) : null}
         </div>
       ) : (
         <form className="answerInputContainer">
