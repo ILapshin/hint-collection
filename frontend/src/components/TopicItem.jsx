@@ -152,6 +152,8 @@ const TopicItem = ({ topic, removeCallback }) => {
               cols={100}
               rows={editHeight}
               value={value}
+              maxLength={255}
+              autoFocus
               onChange={(e) => {
                 setValue(e.target.value);
                 setEditHeight(countTextareaHeight(value));
@@ -186,6 +188,8 @@ const TopicItem = ({ topic, removeCallback }) => {
               cols={100}
               rows={editHeight}
               value={addText}
+              maxLength={255}
+              autoFocus
               onChange={(e) => {
                 setAddText(e.target.value);
                 setEditHeight(countTextareaHeight(addText));
@@ -216,6 +220,7 @@ const TopicItem = ({ topic, removeCallback }) => {
           {subtopics?.map((subtopic) => (
             <SubtopicItem
               subtopic={subtopic}
+              topicSlug={topic.slug}
               removeCallback={removeSubtopic}
               key={subtopic.id}
             />

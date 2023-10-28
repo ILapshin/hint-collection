@@ -7,7 +7,7 @@ class SubtopicSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Subtopic
-        fields = BaseModelSerializer.Meta.fields + ('topic', )
+        fields = BaseModelSerializer.Meta.fields + ('topic', 'slug')
 
 
 class FullSubtopicSerializer(BaseModelSerializer):
@@ -16,4 +16,4 @@ class FullSubtopicSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Subtopic
-        fields = BaseModelSerializer.Meta.fields + ('topic', 'questions', )
+        fields = BaseModelSerializer.Meta.fields + ('topic', 'slug', 'questions', )

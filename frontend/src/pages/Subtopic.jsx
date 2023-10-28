@@ -21,12 +21,15 @@ import countTextareaHeight from "../utils/TextareaHeight";
 import Header from "../components/Header";
 
 const Subtopic = () => {
-  const { subtopicId } = useParams();
+  const [subtopicId, setSubtopicId] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
   const [addHeight, setAddHeight] = useState(2);
   let { user, authTokens } = useContext(AuthContext);
+
+  const { topicSlug } = useParams();
+  const { subtopicSlug } = useParams();
 
   const history = useNavigate();
 
@@ -35,15 +38,19 @@ const Subtopic = () => {
   }, []);
 
   const fetchSubtopic = async () => {
-    const response = await fetch(`/api/subtopics/${subtopicId}`, {
-      headers: authTokens
-        ? {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + String(authTokens.access),
-          }
-        : { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `/api/subtopics/${topicSlug}/${subtopicSlug}/`,
+      {
+        headers: authTokens
+          ? {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + String(authTokens.access),
+            }
+          : { "Content-Type": "application/json" },
+      }
+    );
     const data = await response.json();
+    setSubtopicId(data.id);
     setQuestions(data.questions);
   };
 
@@ -111,6 +118,8 @@ const Subtopic = () => {
                   cols={100}
                   rows={addHeight}
                   value={addText}
+                  maxLength={3000}
+                  autoFocus
                   onChange={(e) => {
                     setAddText(e.target.value);
                     setAddHeight(countTextareaHeight(addText));
@@ -135,13 +144,15 @@ const Subtopic = () => {
               </form>
             </div>
           ) : null}
-          {questions?.map((question) => (
-            <QuestionItem
-              question={question}
-              removeCallback={removeQuestion}
-              key={question.id}
-            />
-          ))}
+          <div className="mt-2">
+            {questions?.map((question) => (
+              <QuestionItem
+                question={question}
+                removeCallback={removeQuestion}
+                key={question.id}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

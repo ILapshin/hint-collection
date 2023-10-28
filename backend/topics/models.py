@@ -4,4 +4,4 @@ from basemodel.models import BaseModel
 
 
 class Topic(BaseModel):
-    pass
+    slug = models.SlugField(blank=True, db_index=True, unique=True)

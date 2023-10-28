@@ -72,6 +72,8 @@ const AnswerItem = ({ answer }) => {
             cols={100}
             rows={editHeight}
             value={value}
+            maxLength={3000}
+            autoFocus
             onChange={(e) => {
               setValue(e.target.value);
               setEditHeight(countTextareaHeight(value));

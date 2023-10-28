@@ -15,9 +15,9 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" exact element={<Home />} />
-            <Route path="/subtopics/:subtopicId" element={<Subtopic />} />
             <Route path="/signup/" element={<Signup />} />
             <Route path="/login/" element={<Login />} />
+            <Route path="/:topicSlug/:subtopicSlug/" element={<Subtopic />} />
           </Routes>
         </AuthProvider>
       </Router>

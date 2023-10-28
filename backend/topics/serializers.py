@@ -9,4 +9,4 @@ class TopicSerializer(BaseModelSerializer):
 
     class Meta(BaseModelSerializer.Meta):
         model = Topic
-        fields = BaseModelSerializer.Meta.fields + ('subtopics',)
+        fields = BaseModelSerializer.Meta.fields + ('subtopics', 'slug')

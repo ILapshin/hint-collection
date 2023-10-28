@@ -6,6 +6,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated 
 
+from slugify import slugify
+
 from topics.models import Topic
 from topics.serializers import TopicSerializer
 
@@ -17,6 +19,7 @@ class TopicList(APIView):
     def post(self, request):        
         data = request.data
         data['created_by'] = request.user.id
+        data['slug'] = slugify(data.get('content'), only_ascii=True)
         serializer = TopicSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

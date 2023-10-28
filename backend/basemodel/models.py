@@ -7,7 +7,7 @@ from users.models import CustomUser
 
 class BaseModel(models.Model):
     created_by = models.ForeignKey(CustomUser, blank=True, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.CharField(max_length=255)
     created_at = models.DateTimeField(blank=True, default=datetime.utcnow)
     is_edited = models.BooleanField(blank=True, default=False)
     edited_at = models.DateTimeField(blank=True, null=True)

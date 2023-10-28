@@ -90,6 +90,8 @@ const Home = () => {
                   cols={100}
                   rows={addHeight}
                   value={addText}
+                  maxLength={255}
+                  autoFocus
                   onChange={(e) => {
                     setAddText(e.target.value);
                     setAddHeight(countTextareaHeight(addText));

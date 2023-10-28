@@ -7,6 +7,7 @@ from questions.models import Question
 
 class Answer(BaseModel):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')    
+    content = models.TextField()  
     likes = models.ManyToManyField(CustomUser, blank=True, related_name='likes')
     
     def toggle_like(self, request):

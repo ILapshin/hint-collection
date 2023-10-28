@@ -18,7 +18,7 @@ import { BiPencil, BiTrash } from "react-icons/bi";
 import { HiCheck, HiX } from "react-icons/hi";
 import countTextareaHeight from "../utils/TextareaHeight";
 
-const SubtopicItem = ({ subtopic, removeCallback }) => {
+const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
   const [text, setText] = useState(subtopic.content);
   const [value, setValue] = useState(subtopic.content);
   const [edit, setEdit] = useState(false);
@@ -63,7 +63,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
       {!edit ? (
         <div className="w-full inline-block ">
           <div className="float-left">
-            <Link to={`/subtopics/${subtopic.id}`}>
+            <Link to={`/${topicSlug}/${subtopic.slug}/`}>
               <h2 className="max-w-prose text-lg float-right break-words whitespace-break-spaces">
                 {text}
               </h2>
@@ -95,6 +95,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
             cols={100}
             rows={editHeight}
             value={value}
+            autoFocus
             onChange={(e) => {
               setValue(e.target.value);
               setEditHeight(countTextareaHeight(value));
