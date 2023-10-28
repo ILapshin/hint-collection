@@ -3,9 +3,21 @@ import "../styles/App.css";
 import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { CgAdd } from "react-icons/cg";
-
-import TopicItem from "../components/TopicItem";
 import { HiCheck, HiX } from "react-icons/hi";
+
+import {
+  GoCheck,
+  GoCheckCircle,
+  GoChevronLeft,
+  GoPencil,
+  GoPlusCircle,
+  GoTriangleDown,
+  GoTriangleRight,
+  GoX,
+} from "react-icons/go";
+
+import Header from "../components/Header";
+import TopicItem from "../components/TopicItem";
 import countTextareaHeight from "../utils/TextareaHeight";
 
 const Home = () => {
@@ -52,10 +64,11 @@ const Home = () => {
   };
 
   return (
-    <div className=" bg-cyan-50 h-screen">
+    <div className=" ">
+      <Header />
       <div className="container max-w-4xl">
-        <div className="text-lg text-cyan-200 float-right cursor-pointer hover:text-cyan-500 mx-4 my-2">
-          <CgAdd
+        <div className="text-lg text-cyan-200 float-right cursor-pointer hover:text-cyan-500 mx-6 my-2">
+          <GoPlusCircle
             size="3em"
             onClick={() => {
               if (!user) {
@@ -70,17 +83,9 @@ const Home = () => {
         <div className="m-2">
           {add ? (
             <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
-              <form
-                className="w-full h-full relative"
-                onSubmit={addTopic}
-                onAbort={(e) => {
-                  e.preventDefault();
-                  setAddText("");
-                  setAdd(false);
-                }}
-              >
+              <form className="w-full h-full relative" onSubmit={addTopic}>
                 <textarea
-                  name="addForm"
+                  name="content"
                   className=" w-full h-full resize-none outline-none text-xl"
                   cols={100}
                   rows={addHeight}
@@ -91,16 +96,20 @@ const Home = () => {
                   }}
                 ></textarea>
                 <button
-                  type="abort"
-                  className="absolute bottom-2 right-14 text-rose-200  cursor-pointer hover:text-rose-500"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setAddText("");
+                    setAdd(false);
+                  }}
+                  className="absolute bottom-0 right-12 text-rose-200  cursor-pointer hover:text-rose-500"
                 >
-                  <HiX size="3em" />
+                  <GoX size="3em" />
                 </button>
                 <button
                   type="submit"
-                  className="absolute bottom-2 right-2 text-emerald-200  cursor-pointer hover:text-emerald-500"
+                  className="absolute bottom-0 right-0 text-emerald-200  cursor-pointer hover:text-emerald-500"
                 >
-                  <HiCheck size="3em" />
+                  <GoCheck size="3em" />
                 </button>
               </form>
             </div>

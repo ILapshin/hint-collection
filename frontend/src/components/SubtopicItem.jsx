@@ -3,6 +3,17 @@ import AuthContext from "../context/AuthContext";
 
 import { Link } from "react-router-dom";
 
+import {
+  GoCheck,
+  GoCheckCircle,
+  GoChevronLeft,
+  GoPencil,
+  GoPlusCircle,
+  GoTriangleDown,
+  GoTriangleRight,
+  GoX,
+} from "react-icons/go";
+
 import { BiPencil, BiTrash } from "react-icons/bi";
 import { HiCheck, HiX } from "react-icons/hi";
 import countTextareaHeight from "../utils/TextareaHeight";
@@ -61,7 +72,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
           <div className="float-right text-gray-300">
             {user && user.user_id === subtopic.created_by ? (
               <div className="">
-                <BiPencil
+                <GoPencil
                   className="m-1 hover:text-gray-600  cursor-pointer"
                   onClick={() => {
                     setEdit(true);
@@ -77,15 +88,7 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
           </div>
         </div>
       ) : (
-        <form
-          className="w-full h-full relative"
-          onSubmit={confirmChanges}
-          onAbort={(e) => {
-            e.preventDefault();
-            setValue("");
-            setEdit(false);
-          }}
-        >
+        <form className="w-full h-full relative" onSubmit={confirmChanges}>
           <textarea
             name="content"
             className=" w-full h-full resize-none outline-none text-lg"
@@ -99,16 +102,20 @@ const SubtopicItem = ({ subtopic, removeCallback }) => {
             ref={sectionInputRef}
           ></textarea>
           <button
-            type="abort"
-            className="absolute bottom-2 right-14 text-rose-200  cursor-pointer hover:text-rose-500"
+            onClick={(e) => {
+              e.preventDefault();
+              setValue(text);
+              setEdit(false);
+            }}
+            className="absolute bottom-0 right-12 text-rose-200  cursor-pointer hover:text-rose-500"
           >
-            <HiX size="3em" />
+            <GoX size="3em" />
           </button>
           <button
             type="submit"
-            className="absolute bottom-2 right-2 text-emerald-200  cursor-pointer hover:text-emerald-500"
+            className="absolute bottom-0 right-0 text-emerald-200  cursor-pointer hover:text-emerald-500"
           >
-            <HiCheck size="3em" />
+            <GoCheck size="3em" />
           </button>
         </form>
       )}

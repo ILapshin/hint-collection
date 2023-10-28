@@ -1,65 +1,84 @@
 import React, { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+
+import {
+  GoCheck,
+  GoCheckCircle,
+  GoChevronLeft,
+  GoPencil,
+  GoPlusCircle,
+  GoTriangleDown,
+  GoTriangleRight,
+  GoX,
+} from "react-icons/go";
 
 const Login = () => {
   const { loginUser } = useContext(AuthContext);
+
+  const history = useNavigate();
+
   return (
-    <div>
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Login
-              </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={loginUser}>
+    <div className=" ">
+      <div className=" h-36 w-fullinline-block text-lg"></div>
+      <section className="container max-w-lg ">
+        <div className="">
+          <div className="">
+            <div className="">
+              <div className=" relative">
+                <button
+                  className="float-left text-gray-300 hover:text-gray-500 cursor-pointer absolute left-0"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    history("/");
+                  }}
+                >
+                  <GoChevronLeft size="2em" />
+                </button>
+                <h1 className=" text-center my-4 text-gray-500 text-xl font-bold">
+                  Вход в аккаунт
+                </h1>
+              </div>
+
+              <form className="" onSubmit={loginUser}>
                 <div>
-                  <label
-                    htmlFor="username"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Username or email
-                  </label>
                   <input
-                    type="username"
+                    type="email"
                     name="username"
                     id="username"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="UserName"
+                    className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white my-1 focus:outline-none focus:bg-blue-50 text-gray-500"
+                    placeholder="Email"
                     required=""
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
                   <input
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Пароль"
+                    className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white my-1  focus:outline-none focus:bg-blue-50 text-gray-500"
                     required=""
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Login
-                </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Forgot password?{" "}
-                  <a
-                    href="#"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                <div className="flex justify-center mt-4">
+                  <button
+                    type="submit"
+                    className=" bg-cyan-500 text-white rounded-xl w-32 h-10 text-center hover:bg-cyan-600  "
                   >
-                    Change password
-                  </a>
+                    Войти
+                  </button>
+                </div>
+
+                <p className="text-center my-4 text-gray-400 text-md ">
+                  Нет аккаунта?{"  "}
+                  <Link
+                    to={"/signup/"}
+                    className="text-center my-4 text-gray-500 text-md underline"
+                  >
+                    Создать
+                  </Link>
                 </p>
               </form>
             </div>

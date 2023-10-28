@@ -3,6 +3,18 @@ import React, { useState, useRef, useContext } from "react";
 import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { HiCheck, HiX } from "react-icons/hi";
+
+import {
+  GoCheck,
+  GoCheckCircle,
+  GoChevronLeft,
+  GoPencil,
+  GoPlusCircle,
+  GoTriangleDown,
+  GoTriangleRight,
+  GoX,
+} from "react-icons/go";
+
 import AuthContext from "../context/AuthContext";
 
 import SubtopicItem from "./SubtopicItem";
@@ -59,7 +71,8 @@ const TopicItem = ({ topic, removeCallback }) => {
     setSubtopics(newList);
   };
 
-  const addSubtopic = async () => {
+  const addSubtopic = async (e) => {
+    e.preventDefault();
     if (addText === "") {
       setAdd(false);
       return;
@@ -94,7 +107,7 @@ const TopicItem = ({ topic, removeCallback }) => {
               }}
             >
               <div className="text-xl text-center float-left my-1">
-                {expand ? <BiCaretDown /> : <BiCaretRight />}
+                {expand ? <GoTriangleDown /> : <GoTriangleRight />}
               </div>
               <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
                 {text}
@@ -103,7 +116,7 @@ const TopicItem = ({ topic, removeCallback }) => {
             <div className="inline-block float-right">
               {user && user.user_id === topic.created_by ? (
                 <div className="text-lg my-1 text-gray-300 float-left">
-                  <BiPencil
+                  <GoPencil
                     className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={() => {
                       setEdit(true);
@@ -117,7 +130,7 @@ const TopicItem = ({ topic, removeCallback }) => {
                 </div>
               ) : null}
               <div className="text-lg text-cyan-200 float-right  cursor-pointer hover:text-cyan-500">
-                <CgAdd
+                <GoPlusCircle
                   size="3em"
                   onClick={() => {
                     if (!user) {
@@ -132,15 +145,7 @@ const TopicItem = ({ topic, removeCallback }) => {
             </div>
           </div>
         ) : (
-          <form
-            className="w-full h-full relative"
-            onSubmit={confirmChanges}
-            onAbort={(e) => {
-              e.preventDefault();
-              setValue("");
-              setEdit(false);
-            }}
-          >
+          <form className="w-full h-full relative" onSubmit={confirmChanges}>
             <textarea
               name="content"
               className=" w-full h-full resize-none outline-none text-xl"
@@ -154,34 +159,56 @@ const TopicItem = ({ topic, removeCallback }) => {
               ref={themeInputRef}
             ></textarea>
             <button
-              type="abort"
-              className="absolute bottom-2 right-14 text-rose-200  cursor-pointer hover:text-rose-500"
+              onClick={(e) => {
+                e.preventDefault();
+                setValue(text);
+                setEdit(false);
+              }}
+              className="absolute bottom-0 right-12 text-rose-200  cursor-pointer hover:text-rose-500"
             >
-              <HiX size="3em" />
+              <GoX size="3em" />
             </button>
             <button
               type="submit"
-              className="absolute bottom-2 right-2 text-emerald-200  cursor-pointer hover:text-emerald-500"
+              className="absolute bottom-0 right-0 text-emerald-200  cursor-pointer hover:text-emerald-500"
             >
-              <HiCheck size="3em" />
+              <GoCheck size="3em" />
             </button>
           </form>
         )}
       </div>
       {add ? (
-        <form className="">
-          <textarea
-            name="editForm"
-            className=""
-            cols={100}
-            rows={2}
-            value={addText}
-            onChange={(e) => {
-              setAddText(e.target.value);
-            }}
-          ></textarea>
-          <ConfirmIcon callback={addSubtopic} />
-        </form>
+        <div className="border-2 border-cyan-400 border-l-4 rounded-lg m-2 py-2 px-4 bg-white">
+          <form className="w-full h-full relative" onSubmit={addSubtopic}>
+            <textarea
+              name="content"
+              className=" w-full h-full resize-none outline-none text-lg"
+              cols={100}
+              rows={editHeight}
+              value={addText}
+              onChange={(e) => {
+                setAddText(e.target.value);
+                setEditHeight(countTextareaHeight(addText));
+              }}
+            ></textarea>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setAddText("");
+                setAdd(false);
+              }}
+              className="absolute bottom-0 right-12 text-rose-200  cursor-pointer hover:text-rose-500"
+            >
+              <GoX size="3em" />
+            </button>
+            <button
+              type="submit"
+              className="absolute bottom-0 right-0 text-emerald-200  cursor-pointer hover:text-emerald-500"
+            >
+              <GoCheck size="3em" />
+            </button>
+          </form>
+        </div>
       ) : null}
 
       {expand ? (

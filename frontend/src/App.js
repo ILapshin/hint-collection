@@ -10,10 +10,9 @@ import Login from "./pages/Login";
 
 function App() {
   return (
-    <div className=" w-full">
+    <div className=" w-full min-h-screen bg-cyan-50">
       <Router>
         <AuthProvider>
-          <Header />
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/subtopics/:subtopicId" element={<Subtopic />} />

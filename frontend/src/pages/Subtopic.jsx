@@ -3,16 +3,29 @@ import AuthContext from "../context/AuthContext";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import {
+  GoCheck,
+  GoCheckCircle,
+  GoChevronLeft,
+  GoPencil,
+  GoPlusCircle,
+  GoTriangleDown,
+  GoTriangleRight,
+  GoX,
+} from "react-icons/go";
+
+import { CgAdd } from "react-icons/cg";
+import { HiCheck, HiX } from "react-icons/hi";
 import QuestionItem from "../components/QuestionItem";
-import AddIcon from "../components/UI/icons/AddIcon";
-import BackIcon from "../components/UI/icons/BackIcon";
-import ConfirmIcon from "../components/UI/icons/ConfirmIcon";
+import countTextareaHeight from "../utils/TextareaHeight";
+import Header from "../components/Header";
 
 const Subtopic = () => {
   const { subtopicId } = useParams();
   const [questions, setQuestions] = useState([]);
   const [add, setAdd] = useState(false);
   const [addText, setAddText] = useState("");
+  const [addHeight, setAddHeight] = useState(2);
   let { user, authTokens } = useContext(AuthContext);
 
   const history = useNavigate();
@@ -39,7 +52,8 @@ const Subtopic = () => {
     setQuestions(newList);
   };
 
-  const addQuestion = async () => {
+  const addQuestion = async (e) => {
+    e.preventDefault();
     if (addText === "") {
       setAdd(false);
       return;
@@ -59,41 +73,77 @@ const Subtopic = () => {
   };
 
   return (
-    <div>
-      <div className="">
-        <BackIcon callback={() => history("/")} />
-        <AddIcon
-          callback={() => {
-            if (!user) {
-              alert("Login to add questions!");
-              return;
-            }
-            setAdd(true);
-          }}
-        />
+    <div className=" ">
+      <Header />
+      <div className="container max-w-4xl">
+        <div className=" inline-block w-full">
+          <div className="text-lg text-gray-300 float-left cursor-pointer hover:text-gray-500 mx-4 ml-2 mt-4">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                history("/");
+              }}
+            >
+              <GoChevronLeft size="3em" />
+            </button>
+          </div>
+          <div className="text-lg text-cyan-200 float-right cursor-pointer hover:text-cyan-500 mx-6 my-2">
+            <GoPlusCircle
+              size="3em"
+              onClick={() => {
+                if (!user) {
+                  alert("Login to add question!");
+                  return;
+                }
+                setAdd(true);
+                setAddHeight(countTextareaHeight(addText));
+              }}
+            />
+          </div>
+        </div>
+        <div className="m-2">
+          {add ? (
+            <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
+              <form className="w-full h-full relative" onSubmit={addQuestion}>
+                <textarea
+                  name="content"
+                  className=" w-full h-full resize-none outline-none text-xl"
+                  cols={100}
+                  rows={addHeight}
+                  value={addText}
+                  onChange={(e) => {
+                    setAddText(e.target.value);
+                    setAddHeight(countTextareaHeight(addText));
+                  }}
+                ></textarea>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setAddText("");
+                    setAdd(false);
+                  }}
+                  className="absolute bottom-0 right-12 text-rose-200  cursor-pointer hover:text-rose-500"
+                >
+                  <GoX size="3em" />
+                </button>
+                <button
+                  type="submit"
+                  className="absolute bottom-0 right-0 text-emerald-200  cursor-pointer hover:text-emerald-500"
+                >
+                  <GoCheck size="3em" />
+                </button>
+              </form>
+            </div>
+          ) : null}
+          {questions?.map((question) => (
+            <QuestionItem
+              question={question}
+              removeCallback={removeQuestion}
+              key={question.id}
+            />
+          ))}
+        </div>
       </div>
-      {add ? (
-        <form className="">
-          <textarea
-            name="editForm"
-            className=""
-            cols={100}
-            rows={2}
-            value={addText}
-            onChange={(e) => {
-              setAddText(e.target.value);
-            }}
-          ></textarea>
-          <ConfirmIcon callback={addQuestion} />
-        </form>
-      ) : null}
-      {questions?.map((question) => (
-        <QuestionItem
-          question={question}
-          removeCallback={removeQuestion}
-          key={question.id}
-        />
-      ))}
     </div>
   );
 };

@@ -1,11 +1,30 @@
 import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
+import {
+  BiCaretRight,
+  BiCaretDown,
+  BiPencil,
+  BiTrash,
+  BiCheckCircle,
+} from "react-icons/bi";
 
+import {
+  GoCheck,
+  GoCheckCircle,
+  GoChevronLeft,
+  GoPencil,
+  GoPlusCircle,
+  GoTriangleDown,
+  GoTriangleRight,
+  GoX,
+} from "react-icons/go";
+
+import { HiCheck, HiX } from "react-icons/hi";
 import AnswerItem from "../components/AnswerItem";
 import CheckIcon from "./UI/icons/CheckIcon";
 import ConfirmIcon from "./UI/icons/ConfirmIcon";
+import countTextareaHeight from "../utils/TextareaHeight";
 
 const QuestionItem = ({ question, removeCallback }) => {
   const [text, setText] = useState(question.content);
@@ -14,11 +33,13 @@ const QuestionItem = ({ question, removeCallback }) => {
   const [expand, setExpand] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isMarked, setIsMarked] = useState(question.is_marked);
+  const [editHeight, setEditHeight] = useState(2);
   let { user, authTokens } = useContext(AuthContext);
 
   const questionInputRef = useRef();
 
   const confirmChanges = (e) => {
+    e.preventDefault();
     updateQuestion();
     setEdit(false);
     setText(questionInputRef.current.value);
@@ -67,45 +88,80 @@ const QuestionItem = ({ question, removeCallback }) => {
   };
 
   return (
-    <div>
-      <div>
+    <div className="">
+      <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
         {!edit ? (
           <>
             <div
+              className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
               onClick={() => {
                 expand ? setExpand(false) : setExpand(true);
               }}
             >
-              <div>{expand ? <BiCaretDown /> : <BiCaretRight />}</div>
-              <div>{text}</div>
+              <div className="text-xl text-center float-left my-1">
+                {expand ? <GoTriangleDown /> : <GoTriangleRight />}
+              </div>
+              <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
+                {text}
+              </h1>
             </div>
-            <div>
+            <div className="inline-block float-right">
               {user && user.user_id === question.created_by ? (
-                <div>
-                  <BiPencil
-                    className="smallIcon"
+                <div className="text-lg my-1 text-gray-300 float-left">
+                  <GoPencil
+                    className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={() => {
-                      expand ? setEdit(false) : setEdit(true);
+                      setEdit(true);
+                      setEditHeight(countTextareaHeight(value));
                     }}
                   />
-                  <BiTrash className="smallIcon" onClick={deleteQuestion} />
+                  <BiTrash
+                    className="m-1  cursor-pointer hover:text-gray-600 "
+                    onClick={deleteQuestion}
+                  />
                 </div>
               ) : null}
-              <CheckIcon callback={toggleMark} isMarked={isMarked} />
+              <div
+                className={`text-lg float-right cursor-pointer  ${
+                  isMarked
+                    ? "text-emerald-500"
+                    : "text-gray-200 hover:text-emerald-200"
+                }`}
+              >
+                <GoCheckCircle size="3em" onClick={toggleMark} />
+              </div>
             </div>
           </>
         ) : (
-          <form className="answerInputContainer">
+          <form className="w-full h-full relative" onSubmit={confirmChanges}>
             <textarea
-              name="answerInput"
-              className="answerInput"
+              name="content"
+              className=" w-full h-full resize-none outline-none text-xl"
               cols={100}
-              rows={2}
+              rows={editHeight}
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={(e) => {
+                setValue(e.target.value);
+                setEditHeight(countTextareaHeight(value));
+              }}
               ref={questionInputRef}
             />
-            <ConfirmIcon callback={confirmChanges} />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setValue(text);
+                setEdit(false);
+              }}
+              className="absolute bottom-0 right-12 text-rose-200  cursor-pointer hover:text-rose-500"
+            >
+              <GoX size="3em" />
+            </button>
+            <button
+              type="submit"
+              className="absolute bottom-0 right-0 text-emerald-200  cursor-pointer hover:text-emerald-500"
+            >
+              <GoCheck size="3em" />
+            </button>
           </form>
         )}
       </div>

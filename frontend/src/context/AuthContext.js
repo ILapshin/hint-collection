@@ -7,6 +7,8 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+  const [username, setUsername] = useState("");
+
   let [authTokens, setAuthTokens] = useState(() =>
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
@@ -50,6 +52,7 @@ export const AuthProvider = ({ children }) => {
   let logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
+    setUsername(null);
     localStorage.removeItem("authTokens");
   };
 
@@ -80,16 +83,31 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const fetchUsername = async () => {
+    const response = await fetch(`/api/auth/users/me/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    });
+    const data = await response.json();
+    setUsername(data.username);
+  };
+
   let contextData = {
     user: user,
     authTokens: authTokens,
     loginUser: loginUser,
     logoutUser: logoutUser,
+    username: username,
+    fetchUsername: fetchUsername,
   };
 
   useEffect(() => {
     if (loading) {
       updateToken();
+      fetchUsername();
     }
 
     let delta = 1000 * 60 * 4;
