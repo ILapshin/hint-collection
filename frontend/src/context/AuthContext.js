@@ -84,7 +84,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const fetchUsername = async () => {
-    console.log(authTokens);
     if (!authTokens) {
       setUsername(null);
       return;

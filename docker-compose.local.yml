@@ -33,7 +33,6 @@ services:
           cpus: '0.25'
           memory: 20M
 
-
   react:
     env_file:
       - .env
@@ -43,5 +42,4 @@ services:
       - "4040:3000"
     depends_on:
       - django
-      - ngrok
     
