@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  db:
+    container_name: postgres-docker
+    image: postgres:14-alpine
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+
+  django:
+    env_file:
+      - .env
+    image: django-docker
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+
+
+  react:
+    env_file:
+      - .env
+    image: react-docker
+    build: ./frontend
+    ports: 
+      - "4040:3000"
+    depends_on:
+      - django
+      - ngrok
+    

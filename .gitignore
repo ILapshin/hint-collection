@@ -6,7 +6,9 @@ yarn-error.log*
 
 
 __pycache__
-.env
+*.env
 .venv
 TODO
 prettier.config.js
+
+ngrok.yml

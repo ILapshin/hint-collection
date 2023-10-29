@@ -2,19 +2,8 @@ import "../styles/App.css";
 
 import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthContext";
-import { CgAdd } from "react-icons/cg";
-import { HiCheck, HiX } from "react-icons/hi";
 
-import {
-  GoCheck,
-  GoCheckCircle,
-  GoChevronLeft,
-  GoPencil,
-  GoPlusCircle,
-  GoTriangleDown,
-  GoTriangleRight,
-  GoX,
-} from "react-icons/go";
+import { GoCheck, GoPlusCircle, GoX } from "react-icons/go";
 
 import Header from "../components/Header";
 import TopicItem from "../components/TopicItem";
@@ -53,6 +42,7 @@ const Home = () => {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + String(authTokens.access),
+        "ngrok-skip-browser-warning": "1559",
       },
       body: JSON.stringify({ content: addText }),
     });

@@ -12,7 +12,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = int(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'react',
+    'django',
+    'django:8000',
+]
 
 
 DB_HOST=os.environ.get('DB_HOST')
@@ -198,4 +204,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'http://react:3000',
+    'http://django:8000',
 ]

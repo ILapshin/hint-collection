@@ -84,6 +84,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const fetchUsername = async () => {
+    console.log(authTokens);
+    if (!authTokens) {
+      setUsername(null);
+      return;
+    }
     const response = await fetch(`/api/auth/users/me/`, {
       method: "GET",
       headers: {
@@ -92,7 +97,9 @@ export const AuthProvider = ({ children }) => {
       },
     });
     const data = await response.json();
-    setUsername(data.username);
+    if (response.status === 200) {
+      setUsername(data.username);
+    }
   };
 
   let contextData = {
