@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
     'react',
     'django',
     'django:8000',
+    'bug-arriving-hog.ngrok-free.app',
 ]
 
 
