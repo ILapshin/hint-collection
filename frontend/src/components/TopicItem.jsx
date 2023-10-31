@@ -1,8 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 
-import { BiCaretRight, BiCaretDown, BiPencil, BiTrash } from "react-icons/bi";
-import { CgAdd } from "react-icons/cg";
-import { HiCheck, HiX } from "react-icons/hi";
+import { BiTrash } from "react-icons/bi";
 
 import {
   GoCheck,
@@ -18,11 +16,10 @@ import {
 import AuthContext from "../context/AuthContext";
 
 import SubtopicItem from "./SubtopicItem";
-import ConfirmIcon from "./UI/icons/ConfirmIcon";
-
 import countTextareaHeight from "../utils/TextareaHeight";
 
 const TopicItem = ({ topic, removeCallback }) => {
+  const [item, setItem] = useState(topic);
   const [expand, setExpand] = useState(false);
   const [text, setText] = useState(topic.content);
   const [value, setValue] = useState(topic.content);
@@ -51,7 +48,8 @@ const TopicItem = ({ topic, removeCallback }) => {
       },
       body: JSON.stringify({ content: value }),
     });
-    return response;
+    const data = await response.json();
+    setItem(data);
   };
 
   const deleteTopic = async () => {
@@ -96,22 +94,33 @@ const TopicItem = ({ topic, removeCallback }) => {
       <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
         {!edit ? (
           <div className="">
-            <div
-              className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
-              onClick={() => {
-                if (expand && add) {
-                  setAddText("");
-                  setAdd(false);
-                }
-                expand ? setExpand(false) : setExpand(true);
-              }}
-            >
-              <div className="text-xl text-center float-left my-1">
-                {expand ? <GoTriangleDown /> : <GoTriangleRight />}
+            <div className=" float-left">
+              <div
+                className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
+                onClick={() => {
+                  if (expand && add) {
+                    setAddText("");
+                    setAdd(false);
+                  }
+                  expand ? setExpand(false) : setExpand(true);
+                }}
+              >
+                <div className="text-xl text-center float-left my-1">
+                  {expand ? <GoTriangleDown /> : <GoTriangleRight />}
+                </div>
+                <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
+                  {text}
+                </h1>
               </div>
-              <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
-                {text}
-              </h1>
+              <div className=" float-left clear-left text-gray-400 text-sm inline-block mt-2 ml-2">
+                <div className="float-left mr-1">{item.creator_name}</div>
+                <div className="float-left">
+                  {!item.is_edited ? item.created_at : item.edited_at}
+                </div>
+                <div className="float-left pt-1">
+                  {item.is_edited ? <GoPencil /> : null}
+                </div>
+              </div>
             </div>
             <div className="inline-block float-right">
               {user && user.user_id === topic.created_by ? (

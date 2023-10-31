@@ -14,11 +14,11 @@ import {
   GoX,
 } from "react-icons/go";
 
-import { BiPencil, BiTrash } from "react-icons/bi";
-import { HiCheck, HiX } from "react-icons/hi";
+import { BiTrash } from "react-icons/bi";
 import countTextareaHeight from "../utils/TextareaHeight";
 
 const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
+  const [item, setItem] = useState(subtopic);
   const [text, setText] = useState(subtopic.content);
   const [value, setValue] = useState(subtopic.content);
   const [edit, setEdit] = useState(false);
@@ -43,7 +43,8 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
       },
       body: JSON.stringify({ content: value }),
     });
-    return response;
+    const data = await response.json();
+    setItem(data);
   };
 
   const deleteSubtopic = async () => {
@@ -61,17 +62,28 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
   return (
     <div className="border-2 border-cyan-400 border-l-4 rounded-lg m-2 py-2 px-4 bg-white">
       {!edit ? (
-        <div className="w-full inline-block ">
+        <div className=" inline-block w-full">
           <div className="float-left">
-            <Link to={`/${topicSlug}/${subtopic.slug}/`}>
-              <h2 className="max-w-prose text-lg float-right break-words whitespace-break-spaces">
-                {text}
-              </h2>
-            </Link>
+            <div className="">
+              <Link to={`/${topicSlug}/${subtopic.slug}/`}>
+                <h2 className="max-w-prose text-lg float-left break-words whitespace-break-spaces">
+                  {text}
+                </h2>
+              </Link>
+              <div className=" float-left clear-left text-gray-400 text-sm inline-block mt-1">
+                <div className="float-left mr-1">{item.creator_name}</div>
+                <div className="float-left">
+                  {!item.is_edited ? item.created_at : item.edited_at}
+                </div>
+                <div className="float-left pt-1">
+                  {item.is_edited ? <GoPencil /> : null}
+                </div>
+              </div>
+            </div>
           </div>
           <div className="float-right text-gray-300">
             {user && user.user_id === subtopic.created_by ? (
-              <div className="">
+              <div className="mt-2">
                 <GoPencil
                   className="m-1 hover:text-gray-600  cursor-pointer"
                   onClick={() => {

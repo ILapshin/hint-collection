@@ -1,13 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-import {
-  BiCaretRight,
-  BiCaretDown,
-  BiPencil,
-  BiTrash,
-  BiCheckCircle,
-} from "react-icons/bi";
+import { BiTrash } from "react-icons/bi";
 
 import {
   GoCheck,
@@ -20,13 +14,11 @@ import {
   GoX,
 } from "react-icons/go";
 
-import { HiCheck, HiX } from "react-icons/hi";
 import AnswerItem from "../components/AnswerItem";
-import CheckIcon from "./UI/icons/CheckIcon";
-import ConfirmIcon from "./UI/icons/ConfirmIcon";
 import countTextareaHeight from "../utils/TextareaHeight";
 
 const QuestionItem = ({ question, removeCallback }) => {
+  const [item, setItem] = useState(question);
   const [text, setText] = useState(question.content);
   const [value, setValue] = useState(question.content);
   const [answers, setAnswers] = useState(question.answers);
@@ -63,7 +55,8 @@ const QuestionItem = ({ question, removeCallback }) => {
       },
       body: JSON.stringify({ content: value }),
     });
-    return response;
+    const data = await response.json();
+    setItem(data);
   };
 
   const markQuestion = async () => {
@@ -91,19 +84,30 @@ const QuestionItem = ({ question, removeCallback }) => {
     <div className="">
       <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
         {!edit ? (
-          <>
-            <div
-              className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
-              onClick={() => {
-                expand ? setExpand(false) : setExpand(true);
-              }}
-            >
-              <div className="text-xl text-center float-left my-1">
-                {expand ? <GoTriangleDown /> : <GoTriangleRight />}
+          <div className="">
+            <div className=" float-left">
+              <div
+                className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
+                onClick={() => {
+                  expand ? setExpand(false) : setExpand(true);
+                }}
+              >
+                <div className="text-xl text-center float-left my-1">
+                  {expand ? <GoTriangleDown /> : <GoTriangleRight />}
+                </div>
+                <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
+                  {text}
+                </h1>
               </div>
-              <h1 className="max-w-prose text-xl float-right break-words whitespace-break-spaces">
-                {text}
-              </h1>
+              <div className=" float-left clear-left text-gray-400 text-sm inline-block mt-2 ml-2">
+                <div className="float-left mr-1">{item.creator_name}</div>
+                <div className="float-left">
+                  {!item.is_edited ? item.created_at : item.edited_at}
+                </div>
+                <div className="float-left pt-1">
+                  {item.is_edited ? <GoPencil /> : null}
+                </div>
+              </div>
             </div>
             <div className="inline-block float-right">
               {user && user.user_id === question.created_by ? (
@@ -131,7 +135,7 @@ const QuestionItem = ({ question, removeCallback }) => {
                 <GoCheckCircle size="3em" onClick={toggleMark} />
               </div>
             </div>
-          </>
+          </div>
         ) : (
           <form className="w-full h-full relative" onSubmit={confirmChanges}>
             <textarea

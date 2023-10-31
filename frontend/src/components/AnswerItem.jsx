@@ -14,10 +14,10 @@ import {
   GoX,
 } from "react-icons/go";
 
-import ConfirmIcon from "./UI/icons/ConfirmIcon";
 import countTextareaHeight from "../utils/TextareaHeight";
 
 const AnswerItem = ({ answer }) => {
+  const [item, setItem] = useState(answer);
   const [text, setText] = useState(answer.content);
   const [value, setValue] = useState(answer.content);
   const [edit, setEdit] = useState(false);
@@ -42,15 +42,27 @@ const AnswerItem = ({ answer }) => {
       },
       body: JSON.stringify({ content: value }),
     });
-    return response;
+    const data = await response.json();
+    setItem(data);
   };
 
   return (
     <div className="border-2 border-cyan-400 border-l-4 rounded-lg m-2 py-2 px-4 bg-white">
       {!edit ? (
         <div className="w-full relative">
-          <div className="max-w-prose min-h-2 text-lg break-words whitespace-break-spaces">
-            {text}
+          <div className="">
+            <div className="max-w-prose min-h-2 text-lg break-words whitespace-break-spaces">
+              {text}
+            </div>
+            <div className="  clear-left text-gray-400 text-sm inline-block mt-1">
+              <div className="float-left mr-1">{item.creator_name}</div>
+              <div className="float-left">
+                {!item.is_edited ? item.created_at : item.edited_at}
+              </div>
+              <div className="float-left pt-1">
+                {item.is_edited ? <GoPencil /> : null}
+              </div>
+            </div>
           </div>
           {user && user.user_id === answer.created_by ? (
             <button
@@ -58,7 +70,7 @@ const AnswerItem = ({ answer }) => {
                 setEdit(true);
                 setEditHeight(countTextareaHeight(value));
               }}
-              className="absolute -bottom-1 -right-1 text-gray-200  cursor-pointer hover:text-gray-500"
+              className="absolute bottom-0 -right-1 text-gray-200  cursor-pointer hover:text-gray-500"
             >
               <GoPencil size="2em" />
             </button>
