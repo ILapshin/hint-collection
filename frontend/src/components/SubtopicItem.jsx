@@ -83,7 +83,7 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
           </div>
           <div className="float-right text-gray-300">
             {user && user.user_id === subtopic.created_by ? (
-              <div className="mt-2">
+              <div className=" text-lg mt-2">
                 <GoPencil
                   className="m-1 hover:text-gray-600  cursor-pointer"
                   onClick={() => {

@@ -15,7 +15,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className=" h-12 w-fullinline-block text-lg">
+    <div className=" h-12 w-full inline-block text-lg">
       <div className="float-right mx-4 my-2">
         {!user ? (
           <div>

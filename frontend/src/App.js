@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Subtopic from "./pages/Subtopic";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           </Routes>
         </AuthProvider>
       </Router>
+      <Footer />
     </div>
   );
 }
