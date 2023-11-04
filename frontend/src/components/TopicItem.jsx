@@ -18,7 +18,7 @@ import AuthContext from "../context/AuthContext";
 import SubtopicItem from "./SubtopicItem";
 import countTextareaHeight from "../utils/TextareaHeight";
 
-const TopicItem = ({ topic, removeCallback }) => {
+const TopicItem = ({ topic, removeCallback, updateCallback }) => {
   const [item, setItem] = useState(topic);
   const [expand, setExpand] = useState(false);
   const [text, setText] = useState(topic.content);
@@ -50,6 +50,7 @@ const TopicItem = ({ topic, removeCallback }) => {
     });
     const data = await response.json();
     setItem(data);
+    updateCallback(data);
   };
 
   const deleteTopic = async () => {
@@ -67,6 +68,11 @@ const TopicItem = ({ topic, removeCallback }) => {
   const removeSubtopic = (subtopic) => {
     const newList = subtopics.filter((item) => item.id !== subtopic.id);
     setSubtopics(newList);
+  };
+
+  const updateSubtopics = (subtopic) => {
+    const newList = subtopics.filter((item) => item.id !== subtopic.id);
+    setSubtopics([...newList, subtopic]);
   };
 
   const addSubtopic = async (e) => {
@@ -124,7 +130,7 @@ const TopicItem = ({ topic, removeCallback }) => {
             </div>
             <div className="inline-block float-right">
               {user && user.user_id === topic.created_by ? (
-                <div className="text-lg my-1 text-gray-300 float-left">
+                <div className="text-lg my-1 text-gray-300 float-right">
                   <GoPencil
                     className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={() => {
@@ -231,6 +237,7 @@ const TopicItem = ({ topic, removeCallback }) => {
               subtopic={subtopic}
               topicSlug={topic.slug}
               removeCallback={removeSubtopic}
+              updateCallback={updateSubtopics}
               key={subtopic.id}
             />
           ))}

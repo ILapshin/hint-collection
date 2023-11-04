@@ -17,7 +17,6 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
-        # unique_together = ('content', 'created_by')
 
     def edit(self, new_content):
         self.content = new_content

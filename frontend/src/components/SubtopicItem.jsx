@@ -1,23 +1,18 @@
 import React, { useState, useRef, useContext } from "react";
-import AuthContext from "../context/AuthContext";
-
 import { Link } from "react-router-dom";
 
-import {
-  GoCheck,
-  GoCheckCircle,
-  GoChevronLeft,
-  GoPencil,
-  GoPlusCircle,
-  GoTriangleDown,
-  GoTriangleRight,
-  GoX,
-} from "react-icons/go";
-
+import { GoCheck, GoPencil, GoX, GoCheckCircle } from "react-icons/go";
 import { BiTrash } from "react-icons/bi";
+
+import AuthContext from "../context/AuthContext";
 import countTextareaHeight from "../utils/TextareaHeight";
 
-const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
+const SubtopicItem = ({
+  subtopic,
+  topicSlug,
+  removeCallback,
+  updateCallback,
+}) => {
   const [item, setItem] = useState(subtopic);
   const [text, setText] = useState(subtopic.content);
   const [value, setValue] = useState(subtopic.content);
@@ -45,6 +40,7 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
     });
     const data = await response.json();
     setItem(data);
+    updateCallback(data);
   };
 
   const deleteSubtopic = async () => {
@@ -62,7 +58,7 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
   return (
     <div className="border-2 border-cyan-400 border-l-4 rounded-lg m-2 py-2 px-4 bg-white">
       {!edit ? (
-        <div className=" inline-block w-full">
+        <div className=" inline-block w-full max-w-full">
           <div className="float-left">
             <div className="">
               <Link to={`/${topicSlug}/${subtopic.slug}/`}>
@@ -70,6 +66,7 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
                   {text}
                 </h2>
               </Link>
+
               <div className=" float-left clear-left text-gray-400 text-sm inline-block mt-1">
                 <div className="float-left mr-1">{item.creator_name}</div>
                 <div className="float-left">
@@ -81,9 +78,14 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
               </div>
             </div>
           </div>
-          <div className="float-right text-gray-300">
+          <div className="float-right inline-block text-gray-300">
+            <div className="float-left mx-2 text-lg text-gray-400">
+              {"Вопросов: "}
+              {user ? `${item.num_marked} из ` : null}
+              {item.num_questions}
+            </div>
             {user && user.user_id === subtopic.created_by ? (
-              <div className=" text-lg mt-2">
+              <div className=" text-lg mt-2 float-right">
                 <GoPencil
                   className="m-1 hover:text-gray-600  cursor-pointer"
                   onClick={() => {
@@ -107,6 +109,7 @@ const SubtopicItem = ({ subtopic, topicSlug, removeCallback }) => {
             cols={100}
             rows={editHeight}
             value={value}
+            maxLength={255}
             autoFocus
             onChange={(e) => {
               setValue(e.target.value);

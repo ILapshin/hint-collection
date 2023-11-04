@@ -22,7 +22,7 @@ class SubtopicList(APIView):
         data = request.data
         data['topic'] = topic.id
         data['created_by'] = request.user.id
-        data['slug'] = slugify(data.get('content'), only_ascii=True)
+        data['slug'] = slugify(data.get('content'), only_ascii=True)[:50]
         serializer = FullSubtopicSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()

@@ -21,7 +21,14 @@ const Home = () => {
   }, []);
 
   const fetchTopics = async () => {
-    const response = await fetch("/api/topics/");
+    const response = await fetch("/api/topics/", {
+      headers: authTokens
+        ? {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + String(authTokens.access),
+          }
+        : { "Content-Type": "application/json" },
+    });
     const data = await response.json();
     setTopics(data);
   };
@@ -29,6 +36,11 @@ const Home = () => {
   const removeTopic = (topic) => {
     const newList = topics.filter((item) => item.id !== topic.id);
     setTopics(newList);
+  };
+
+  const updateTopics = (topic) => {
+    const newList = topics.filter((item) => item.id !== topic.id);
+    setTopics([...newList, topic]);
   };
 
   const addTopic = async (e) => {
@@ -111,6 +123,7 @@ const Home = () => {
               <TopicItem
                 topic={topic}
                 removeCallback={removeTopic}
+                updateCallback={updateTopics}
                 key={topic.id}
               />
             ))}

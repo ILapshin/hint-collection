@@ -84,7 +84,7 @@ const QuestionItem = ({ question, removeCallback }) => {
     <div className="">
       <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
         {!edit ? (
-          <div className="">
+          <div className="inline-block w-full max-w-full">
             <div className=" float-left">
               <div
                 className="cursor-pointer inline-block text-gray-700 dark:text-gray-700 float-left"
@@ -111,7 +111,7 @@ const QuestionItem = ({ question, removeCallback }) => {
             </div>
             <div className="inline-block float-right">
               {user && user.user_id === question.created_by ? (
-                <div className="text-lg my-1 text-gray-300 float-left">
+                <div className="text-lg my-1 text-gray-300 float-right">
                   <GoPencil
                     className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={() => {
@@ -126,7 +126,7 @@ const QuestionItem = ({ question, removeCallback }) => {
                 </div>
               ) : null}
               <div
-                className={`text-lg float-right cursor-pointer  ${
+                className={`text-lg float-left cursor-pointer  ${
                   isMarked
                     ? "text-emerald-500"
                     : "text-gray-200 hover:text-emerald-200"
