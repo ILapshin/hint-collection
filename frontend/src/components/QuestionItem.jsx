@@ -81,7 +81,7 @@ const QuestionItem = ({ question, removeCallback }) => {
   };
 
   return (
-    <div className="">
+    <div className="mb-2">
       <div className="border-2 border-cyan-500 rounded-xl p-2 pr-4 w-full inline-block border-l-4 bg-white">
         {!edit ? (
           <div className="inline-block w-full max-w-full">
