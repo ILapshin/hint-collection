@@ -130,7 +130,7 @@ const TopicItem = ({ topic, removeCallback, updateCallback }) => {
             </div>
             <div className="inline-block float-right">
               {user && user.user_id === topic.created_by ? (
-                <div className="text-lg my-1 text-gray-300 float-right">
+                <div className="text-lg my-1 text-gray-300 float-left">
                   <GoPencil
                     className="m-1  cursor-pointer hover:text-gray-600 "
                     onClick={() => {
